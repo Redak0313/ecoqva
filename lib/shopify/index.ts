@@ -100,6 +100,7 @@ export async function shopifyFetch<T>({
 
     // Check for errors in the GraphQL response
     if (body.errors) {
+      console.error('GraphQL Errors:', body.errors);
       throw new Error(`GraphQL Error: ${JSON.stringify(body.errors)}`);
     }
 
