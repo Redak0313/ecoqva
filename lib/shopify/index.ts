@@ -87,10 +87,20 @@ export async function shopifyFetch<T>({
       ...(tags && { next: { tags } })
     });
 
+    // Log the response status for debugging
+    console.log(`Response Status: ${result.status}`);
+
+    // Check if the response is OK (status code in the range 200-299)
+    if (!result.ok) {
+      const errorBody = await result.text(); // Get the raw response text
+      throw new Error(`HTTP Error: ${result.status} - ${errorBody}`);
+    }
+
     const body = await result.json();
 
+    // Check for errors in the GraphQL response
     if (body.errors) {
-      throw body.errors[0];
+      throw new Error(`GraphQL Error: ${JSON.stringify(body.errors)}`);
     }
 
     return {
@@ -98,6 +108,9 @@ export async function shopifyFetch<T>({
       body
     };
   } catch (e) {
+    // Log the error for debugging
+    console.error('Fetch Error:', e);
+
     if (isShopifyError(e)) {
       throw {
         cause: e.cause?.toString() || 'unknown',
