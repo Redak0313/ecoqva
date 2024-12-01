@@ -1,7 +1,11 @@
+import { ArrowRightIcon, PowerIcon } from '@heroicons/react/24/outline';
+import { signOut } from 'auth';
 import CartModal from 'components/cart/modal';
 import LogoSquare from 'components/logo-square';
+import { isUserAuthenticated } from 'helpers/check-cookie-auth';
 import { getMenu } from 'lib/shopify';
 import { Menu } from 'lib/shopify/types';
+import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import MobileMenu from './mobile-menu';
@@ -10,6 +14,8 @@ import Search, { SearchSkeleton } from './search';
 const { SITE_NAME } = process.env;
 
 export async function Navbar() {
+  const cookieStore = await cookies();
+  const authenticated = isUserAuthenticated(cookieStore);
   const menu = await getMenu('next-js-frontend-header-menu');
 
   return (
@@ -52,7 +58,30 @@ export async function Navbar() {
             <Search />
           </Suspense>
         </div>
-        <div className="flex justify-end md:w-1/3">
+
+        <div className="flex items-center justify-end md:w-1/3">
+          {authenticated ? (
+            <form
+              action={async () => {
+                'use server';
+                await signOut();
+              }}
+            >
+              <button className="mr-2 flex flex-row items-center gap-x-2 text-center text-sm text-black underline-offset-4 hover:text-black hover:underline dark:text-white dark:hover:text-neutral-300">
+                <PowerIcon className="w-4" />
+                <div className="hidden uppercase md:block">Salir</div>
+              </button>
+            </form>
+          ) : (
+            <a
+              href="/login"
+              className="mr-2 flex flex-row items-center gap-x-2 text-center text-sm text-black underline-offset-4 hover:text-black hover:underline dark:text-white dark:hover:text-neutral-300"
+            >
+              <ArrowRightIcon className="w-4" />
+              <div className="hidden uppercase md:block">Entrar</div>
+            </a>
+          )}
+
           <CartModal />
         </div>
       </div>

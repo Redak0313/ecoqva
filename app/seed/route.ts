@@ -1,5 +1,6 @@
 import { db } from '@vercel/postgres';
-import { users } from 'app/lib/placeholder-data';
+import { users } from 'app/(main)/lib/placeholder-data';
+
 import bcrypt from 'bcryptjs';
 
 const client = await db.connect();

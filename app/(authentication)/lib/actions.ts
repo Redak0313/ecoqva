@@ -1,9 +1,7 @@
 'use server';
 
-import { signIn } from 'auth';
+import { signIn, signOut } from 'auth';
 import { AuthError } from 'next-auth';
-
-// ...
 
 export async function authenticate(prevState: string | undefined, formData: FormData) {
   try {
@@ -12,11 +10,19 @@ export async function authenticate(prevState: string | undefined, formData: Form
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin':
-          return 'Invalid credentials.';
+          return 'Credenciales incorrectas.';
         default:
-          return 'Something went wrong.';
+          return 'Algo salio mal.';
       }
     }
+    throw error;
+  }
+}
+
+export async function logOut() {
+  try {
+    await signOut();
+  } catch (error) {
     throw error;
   }
 }

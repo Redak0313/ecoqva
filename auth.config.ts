@@ -11,9 +11,8 @@ export const authConfig = {
       if (isOnBookings) {
         if (isLoggedIn) return true;
         return false; // Redirect unauthenticated users to login page
-      } else if (isLoggedIn) {
-        //TODO: Check this redirect
-        // return Response.redirect(new URL('/reservar', nextUrl));
+      } else if (isLoggedIn && nextUrl.pathname.startsWith('/login')) {
+        return Response.redirect(new URL('/', nextUrl));
       }
       return true;
     }

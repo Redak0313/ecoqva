@@ -6,7 +6,7 @@ import { ensureStartsWith } from 'lib/utils';
 import { cookies } from 'next/headers';
 import { ReactNode } from 'react';
 import { Toaster } from 'sonner';
-import './globals.css';
+import '../globals.css';
 
 const { TWITTER_CREATOR, TWITTER_SITE, SITE_NAME } = process.env;
 const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
@@ -41,7 +41,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const cart = getCart(cartId);
 
   return (
-    <html lang="en" className={GeistSans.variable}>
+    <html lang="es" className={GeistSans.variable}>
       <body className="bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white">
         <CartProvider cartPromise={cart}>
           <Navbar />
