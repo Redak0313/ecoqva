@@ -3,12 +3,26 @@
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { AtSymbolIcon, ExclamationCircleIcon, KeyIcon } from '@heroicons/react/24/outline';
 
-import { useActionState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useActionState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { authenticate } from '../lib/actions';
 import { Button } from './button';
 
 export default function LoginForm() {
-  const [errorMessage, formAction, isPending] = useActionState(authenticate, undefined);
+  const [message, formAction, isPending] = useActionState(authenticate, undefined);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (message?.includes('sesión')) {
+      toast(message, {
+        id: 'welcome-toast',
+        duration: 1200,
+        onDismiss: () => router.push('/'),
+        onAutoClose: () => router.push('/')
+      });
+    }
+  }, [message]);
 
   return (
     <form action={formAction} className="space-y-3">
@@ -53,10 +67,10 @@ export default function LoginForm() {
           Iniciar <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
         <div className="flex h-8 items-end space-x-1" aria-live="polite" aria-atomic="true">
-          {errorMessage && (
+          {message?.includes('Error') && (
             <>
               <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-              <p className="text-sm text-red-500">{errorMessage}</p>
+              <p className="text-sm text-red-500">{message}</p>
             </>
           )}
         </div>
