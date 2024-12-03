@@ -1,6 +1,6 @@
 import { db } from '@vercel/postgres';
 
-import { User } from 'app/lib/definitions';
+import { User } from 'app/(main)/lib/definitions';
 import bcrypt from 'bcryptjs';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
