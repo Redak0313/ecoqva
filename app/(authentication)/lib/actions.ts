@@ -5,21 +5,32 @@ import { AuthError } from 'next-auth';
 import { signUpUser } from 'sql/users';
 import { signUpSchema } from '../types/schemas';
 
-export async function authenticate(prevState: string | undefined, formData: FormData) {
+export async function authenticate(prevState: any, formData: FormData) {
   try {
+    const email = formData.get('email') as string;
     await signIn('credentials', {
       redirect: false,
-      email: formData.get('email'),
+      email: email,
       password: formData.get('password')
     });
-    return 'Haz iniciado sesión correctamente.';
+
+    return {
+      email,
+      message: 'Haz iniciado sesión correctamente.'
+    };
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin':
-          return 'Error, credenciales incorrectas.';
+          return {
+            email: null,
+            message: 'Error, correo o contraseña incorrectos.'
+          };
         default:
-          return 'Error, algo salio mal.';
+          return {
+            email: null,
+            message: 'Error, algo salió mal.'
+          };
       }
     }
     throw error;
