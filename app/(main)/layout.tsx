@@ -1,4 +1,5 @@
 import { CartProvider } from 'components/cart/cart-context';
+import CookieConsentBanner from 'components/cookie-consent';
 import { Navbar } from 'components/layout/navbar';
 import { GeistSans } from 'geist/font/sans';
 import { getCart } from 'lib/shopify';
@@ -48,6 +49,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <main>
             {children}
             <Toaster closeButton />
+
+            <CookieConsentBanner />
           </main>
         </CartProvider>
       </body>
