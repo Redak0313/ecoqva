@@ -39,7 +39,11 @@ export async function authenticate(prevState: any, formData: FormData) {
 
 export async function logOut() {
   try {
-    await signOut();
+    await signOut({ redirect: false });
+
+    return {
+      message: 'Haz cerrado sesión correctamente.'
+    };
   } catch (error) {
     throw error;
   }
