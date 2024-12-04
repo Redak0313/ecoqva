@@ -199,8 +199,7 @@ export default function CartModal() {
                       />
                     </div>
                   </div>
-                  <button
-                    type="button"
+                  <div
                     title="reservar"
                     onClick={() => {
                       closeCart();
@@ -208,7 +207,7 @@ export default function CartModal() {
                     }}
                   >
                     <CheckoutButton />
-                  </button>
+                  </div>
                 </div>
               )}
             </Dialog.Panel>
@@ -219,7 +218,8 @@ export default function CartModal() {
         open={modalOpen}
         setOpenAction={setModalOpen}
         title="Reservar"
-        description="Al confirmar la reserva uno de nuestros administradores se pondrá en contacto contigo para confirmarla y ajustar los detalles del pago correspondiente al 10% del total para comenzar el proceso."
+        cart={cart}
+        description="Al confirmar tu reserva, uno de nuestros administradores se pondrá en contacto contigo lo más rápido posible para confirmarla y coordinar los detalles del pago correspondiente al 10% del total. Todos los detalles serán enviados directamente a tu correo electrónico para tu conveniencia."
       />
     </>
   );
