@@ -22,38 +22,23 @@ function SubmitButton({
   if (!availableForSale) {
     return (
       <button disabled className={clsx(buttonClasses, disabledClasses)}>
-        Out Of Stock
-      </button>
-    );
-  }
-
-  console.log(selectedVariantId);
-  if (!selectedVariantId) {
-    return (
-      <button
-        aria-label="Please select an option"
-        disabled
-        className={clsx(buttonClasses, disabledClasses)}
-      >
-        <div className="absolute left-0 ml-4">
-          <PlusIcon className="h-5" />
-        </div>
-        Add To Cart
+        Agotado
       </button>
     );
   }
 
   return (
     <button
-      aria-label="Add to cart"
-      className={clsx(buttonClasses, {
-        'hover:opacity-90': true
+      aria-label={`${!selectedVariantId ? 'Seleccione una variante' : 'Agregar al carrito'}`}
+      disabled={!selectedVariantId}
+      className={clsx(!selectedVariantId && disabledClasses, buttonClasses, {
+        'hover:opacity-90': selectedVariantId
       })}
     >
       <div className="absolute left-0 ml-4">
         <PlusIcon className="h-5" />
       </div>
-      Add To Cart
+      Agregar al carrito
     </button>
   );
 }
