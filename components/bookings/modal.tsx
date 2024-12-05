@@ -2,9 +2,8 @@
 
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
-import { sendEmail } from 'components/email/send-email';
+import { useBookings } from 'app/hooks/useBookings';
 import { Cart } from 'lib/shopify/types';
-import { toast } from 'sonner';
 
 interface ModalProps {
   open: boolean;
@@ -21,6 +20,7 @@ export default function BookingsModal({
   description,
   cart
 }: ModalProps) {
+  const { bookItems } = useBookings();
   return (
     <Dialog open={open} onClose={setOpenAction} className="relative z-10">
       <DialogBackdrop
@@ -60,36 +60,9 @@ export default function BookingsModal({
               <button
                 type="button"
                 data-autofocus
-                onClick={() => {
-                  if (!cart?.lines) {
-                    return;
-                  }
-                  const variables = {
-                    cart,
-                    to: 'redakdev@gmail.com',
-                    subject: 'RESERVA REALIZADA',
-                    customerName: 'Kader',
-                    customerEmail: 'redakdev@gmail.com',
-                    orderId: '123456',
-                    orderDate: Date.now().toString()
-                  };
-
-                  sendEmail('AdminOrderEmailTemplate', variables)
-                    .catch((err) => {
-                      console.error('🚀 ~ err:', err);
-                      toast('Ocurrió un error al realizar el pedido', {
-                        id: 'welcome-toast',
-                        duration: 1200
-                      });
-                    })
-                    .then(() => {
-                      toast('Hemos enviado los datos del pedido a tu email', {
-                        id: 'welcome-toast',
-                        duration: 1200
-                      });
-
-                      setOpenAction(false);
-                    });
+                onClick={async () => {
+                  await bookItems(cart!);
+                  setOpenAction(false);
                 }}
                 className="mt-3 inline-flex w-full justify-center rounded-full bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-900 sm:mt-0 sm:w-auto"
               >

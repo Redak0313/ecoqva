@@ -1,6 +1,7 @@
 'use client';
 
-import { createContext, useContext, useMemo, useReducer } from 'react';
+import { logOut } from 'components/actions/action';
+import { createContext, useContext, useEffect, useMemo, useReducer } from 'react';
 
 type UserAction = { type: 'SET_USER'; payload: UserContextType } | { type: 'REMOVE_USER' };
 
@@ -28,8 +29,10 @@ const UserContext = createContext<
 function userReducer(state: UserContextType, action: UserAction) {
   switch (action.type) {
     case 'SET_USER':
+      localStorage.setItem('user', JSON.stringify(action.payload));
       return { ...action.payload };
     case 'REMOVE_USER':
+      localStorage.removeItem('user');
       return initialState;
     default:
       throw new Error(`Unhandled action type: ${action}`);
@@ -38,6 +41,20 @@ function userReducer(state: UserContextType, action: UserAction) {
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [user, dispatch] = useReducer(userReducer, initialState);
+
+  const syncUser = async () => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      dispatch({ type: 'SET_USER', payload: JSON.parse(storedUser) });
+    } else {
+      await logOut();
+      dispatch({ type: 'REMOVE_USER' });
+    }
+  };
+
+  useEffect(() => {
+    syncUser();
+  }, []);
 
   const setUser = (user: UserContextType) => {
     dispatch({ type: 'SET_USER', payload: user });
