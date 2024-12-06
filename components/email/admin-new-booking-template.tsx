@@ -44,7 +44,7 @@ export const AdminOrderEmailTemplate: React.FC<Readonly<AdminOrderEmailProps>> =
             Cantidad
           </th>
           <th style={{ borderBottom: '2px solid #ddd', textAlign: 'center', padding: '5px' }}>
-            Opciones
+            Descripción
           </th>
           <th style={{ borderBottom: '2px solid #ddd', textAlign: 'right', padding: '5px' }}>
             Precio Total
@@ -55,7 +55,7 @@ export const AdminOrderEmailTemplate: React.FC<Readonly<AdminOrderEmailProps>> =
         {cart.lines?.map((item, index) => (
           <tr key={index}>
             <td style={{ borderBottom: '1px solid #ddd', padding: '5px' }}>
-              <strong>{item.merchandise.title}</strong>
+              <strong>{item.merchandise.product.title}</strong>
               <br />
               <img
                 src={item.merchandise.product.featuredImage.url}
@@ -67,11 +67,7 @@ export const AdminOrderEmailTemplate: React.FC<Readonly<AdminOrderEmailProps>> =
               {item.quantity}
             </td>
             <td style={{ borderBottom: '1px solid #ddd', textAlign: 'center', padding: '5px' }}>
-              {item.merchandise.selectedOptions.map((option) => (
-                <div key={option.name}>
-                  {option.name}: {option.value}
-                </div>
-              ))}
+              <strong>{item.merchandise.product.description}</strong>
             </td>
             <td style={{ borderBottom: '1px solid #ddd', textAlign: 'right', padding: '5px' }}>
               {item.cost.totalAmount.currencyCode}{' '}
