@@ -13,15 +13,12 @@ export async function sendEmail(templateName: string, variables: any) {
 
     if (!response.ok) {
       const error = await response.json();
-      console.error('Error al enviar el correo:', error);
       return { success: false, error };
     }
 
     const data = await response.json();
-    console.log('Correo enviado exitosamente:', data);
     return { success: true, data };
   } catch (err) {
-    console.error('Error de red o servidor:', err);
-    return { success: false, error: err };
+    throw err;
   }
 }

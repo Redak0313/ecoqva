@@ -3,6 +3,7 @@
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import { useBookings } from 'app/hooks/useBookings';
+import LoadingDots from 'components/loading-dots';
 import { Cart } from 'lib/shopify/types';
 
 interface ModalProps {
@@ -20,7 +21,8 @@ export default function BookingsModal({
   description,
   cart
 }: ModalProps) {
-  const { bookItems } = useBookings();
+  const { bookItems, loading } = useBookings();
+
   return (
     <Dialog open={open} onClose={setOpenAction} className="relative z-10">
       <DialogBackdrop
@@ -64,9 +66,14 @@ export default function BookingsModal({
                   await bookItems(cart!);
                   setOpenAction(false);
                 }}
-                className="mt-3 inline-flex w-full justify-center rounded-full bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-900 sm:mt-0 sm:w-auto"
+                disabled={!cart || loading}
+                className="mt-3 inline-flex w-full items-center justify-center rounded-full bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-900 sm:mt-0 sm:w-auto"
               >
-                Confirmar reserva
+                {loading ? (
+                  <LoadingDots className="items-center justify-center bg-white" />
+                ) : (
+                  'Confirmar reserva'
+                )}
               </button>
             </div>
           </DialogPanel>
