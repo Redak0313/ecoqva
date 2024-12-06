@@ -15,7 +15,7 @@ export async function POST(request: Request) {
       .select('id, name')
       .eq('email', email)
       .single()
-      .then((res: { data: { id: any; name: any } }) => {
+      .then((res: any) => {
         return { id: res.data?.id, name: res.data?.name };
       });
 
