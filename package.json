@@ -16,6 +16,7 @@
     "@headlessui/react": "^2.1.2",
     "@heroicons/react": "^2.1.5",
     "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.47.1",
     "@vercel/postgres": "^0.10.0",
     "bcrypt": "link:bcrypt",
     "bcryptjs": "^2.4.3",

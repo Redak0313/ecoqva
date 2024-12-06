@@ -1,18 +1,27 @@
 'use client';
 
 import type { Cart, CartItem, Product, ProductVariant } from 'lib/shopify/types';
-import React, { createContext, use, useContext, useMemo, useOptimistic } from 'react';
+import React, {
+  createContext,
+  startTransition,
+  use,
+  useContext,
+  useMemo,
+  useOptimistic
+} from 'react';
 
 type UpdateType = 'plus' | 'minus' | 'delete';
 
 type CartAction =
   | { type: 'UPDATE_ITEM'; payload: { merchandiseId: string; updateType: UpdateType } }
-  | { type: 'ADD_ITEM'; payload: { variant: ProductVariant; product: Product } };
+  | { type: 'ADD_ITEM'; payload: { variant: ProductVariant; product: Product } }
+  | { type: 'CLEAR_CART' };
 
 type CartContextType = {
   cart: Cart | undefined;
   updateCartItem: (merchandiseId: string, updateType: UpdateType) => void;
   addCartItem: (variant: ProductVariant, product: Product) => void;
+  clearCart: () => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -68,7 +77,8 @@ function createOrUpdateCartItem(
         id: product.id,
         handle: product.handle,
         title: product.title,
-        featuredImage: product.featuredImage
+        featuredImage: product.featuredImage,
+        description: product.description
       }
     }
   };
@@ -103,7 +113,7 @@ function createEmptyCart(): Cart {
   };
 }
 
-function cartReducer(state: Cart | undefined, action: CartAction): Cart {
+function cartReducer(state: Cart | undefined, action: CartAction): Cart | undefined {
   const currentCart = state || createEmptyCart();
 
   switch (action.type) {
@@ -140,6 +150,8 @@ function cartReducer(state: Cart | undefined, action: CartAction): Cart {
 
       return { ...currentCart, ...updateCartTotals(updatedLines), lines: updatedLines };
     }
+    case 'CLEAR_CART':
+      return undefined;
     default:
       return currentCart;
   }
@@ -163,11 +175,18 @@ export function CartProvider({
     updateOptimisticCart({ type: 'ADD_ITEM', payload: { variant, product } });
   };
 
+  const clearCart = () => {
+    startTransition(() => {
+      updateOptimisticCart({ type: 'CLEAR_CART' });
+    });
+  };
+
   const value = useMemo(
     () => ({
       cart: optimisticCart,
       updateCartItem,
-      addCartItem
+      addCartItem,
+      clearCart
     }),
     [optimisticCart]
   );
