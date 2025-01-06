@@ -1,3 +1,4 @@
+import { ProfileStatus } from 'components/actions/profile-status';
 import { Status } from 'components/actions/status';
 import CartModal from 'components/cart/modal';
 import LogoSquare from 'components/logo-square';
@@ -21,7 +22,7 @@ export async function Navbar() {
         </Suspense>
       </div>
       <div className="flex w-full items-center">
-        <div className="flex w-full md:w-1/3">
+        <div className="flex w-full items-center md:w-1/3">
           <Link
             href="/"
             prefetch={true}
@@ -32,6 +33,7 @@ export async function Navbar() {
               {SITE_NAME}
             </div>
           </Link>
+          <ProfileStatus className="hidden md:block" />
           {menu.length ? (
             <ul className="hidden gap-6 text-sm md:flex md:items-center">
               {menu.map((item: Menu) => (

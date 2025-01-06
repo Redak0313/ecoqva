@@ -8,10 +8,12 @@ import { signUpSchema } from '../types/schemas';
 export async function authenticate(prevState: any, formData: FormData) {
   try {
     const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
     await signIn('credentials', {
       redirect: false,
-      email: email,
-      password: formData.get('password')
+      email,
+      password
     });
 
     return {
@@ -23,11 +25,13 @@ export async function authenticate(prevState: any, formData: FormData) {
       switch (error.type) {
         case 'CredentialsSignin':
           return {
+            status: 401,
             email: null,
             message: 'Error, correo o contraseña incorrectos.'
           };
         default:
           return {
+            status: 500,
             email: null,
             message: 'Error, algo salió mal.'
           };

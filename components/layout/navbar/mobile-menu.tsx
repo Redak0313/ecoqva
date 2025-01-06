@@ -2,15 +2,17 @@
 
 import { Dialog, Transition } from '@headlessui/react';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Fragment, Suspense, useEffect, useState } from 'react';
 
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { ProfileStatus } from 'components/actions/profile-status';
 import { Menu } from 'lib/shopify/types';
 import Search, { SearchSkeleton } from './search';
 
 export default function MobileMenu({ menu }: { menu: Menu[] }) {
   const pathname = usePathname();
+  const navigation = useRouter();
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
   const openMobileMenu = () => setIsOpen(true);
@@ -75,6 +77,17 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
                   <Suspense fallback={<SearchSkeleton />}>
                     <Search />
                   </Suspense>
+                </div>
+
+                <div
+                  className="flex flex-row items-center justify-between rounded-lg border border-neutral-200 px-4 pt-4 dark:border-neutral-700"
+                  onClick={() => {
+                    navigation.push('/profile');
+                    closeMobileMenu();
+                  }}
+                >
+                  <ProfileStatus className="w-12 pb-4 md:hidden" />
+                  <p className="pb-4">Mi Perfil</p>
                 </div>
                 {menu.length ? (
                   <ul className="flex w-full flex-col">
