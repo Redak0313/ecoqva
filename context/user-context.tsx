@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect, useMemo, useReducer } from 'react
 
 type UserAction = { type: 'SET_USER'; payload: UserContextType } | { type: 'REMOVE_USER' };
 
-interface UserContextType {
+export interface UserContextType {
   id: string | null;
   name: string | null;
   email: string | null;
